@@ -10,12 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sviridov.bootcamplocator.R;
+import com.example.sviridov.bootcamplocator.model.BootCamp;
+import com.example.sviridov.bootcamplocator.servises.DataService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,7 +82,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
 
 
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -124,8 +129,22 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             mMap.addMarker(userMarker);
 
         }
-
+        updateMarkerForZip(92284);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
+    }
+
+    public void updateMarkerForZip(int zipcode) {
+
+        ArrayList<BootCamp> locations = DataService.getInstance().getBootCampLocationWithin10milesZip(zipcode);
+
+        for (int i = 0; i < locations.size(); i++) {
+            BootCamp loc = locations.get(i);
+            MarkerOptions marker = new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongtitude()));
+            marker.title(loc.getLocationTitle());
+            marker.snippet(loc.getLocationAddress());
+            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.a6096188ce806c80cf30dca727fe7c237));
+            mMap.addMarker(marker);
+        }
     }
 }
