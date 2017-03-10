@@ -1,6 +1,7 @@
 package com.example.sviridov.bootcamplocator.fragments;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class MainFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
+    private MarkerOptions userMarker;
 
 
     private OnMainFragmentInteractionListener mListener;
@@ -72,9 +74,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng moscow = new LatLng(55.751667, 37.617778);
-        mMap.addMarker(new MarkerOptions().position(moscow).title("Marker in Moscow"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(moscow));
+
 
 
     }
@@ -116,5 +116,16 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     public interface OnMainFragmentInteractionListener {
         // TODO: Update argument type and name
         void onMainFragmentInteraction(Uri uri);
+    }
+
+    public void setUserMarkers(LatLng latLng) {
+        if (userMarker == null) {
+            userMarker = new MarkerOptions().position(latLng).title("Current Location");
+            mMap.addMarker(userMarker);
+
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
     }
 }
