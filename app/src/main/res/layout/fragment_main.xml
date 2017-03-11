@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sviridov.bootcamplocator.fragments.MainFragment">
+    tools:context="com.example.sviridov.bootcamplocator.Fragments.MainFragment">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -28,15 +28,17 @@
                     card_view:srcCompat="@drawable/places_ic_search" />
 
                 <EditText
+                    android:id="@+id/zip_text"
                     android:layout_width="300dp"
                     android:layout_height="40dp"
                     android:hint="@string/hint"
-                    android:inputType="number"/>
+                    android:inputType="number" />
+
                 <ImageButton
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    card_view:srcCompat="@drawable/comrs"
-                    android:background="#00000000" />
+                    android:background="#00000000"
+                    card_view:srcCompat="@drawable/comrs" />
             </LinearLayout>
 
 
@@ -51,6 +53,15 @@
             android:layout_height="match_parent"
             tools:context="com.example.sviridov.bootcamplocator.Activities.MapsActivity"
             tools:layout="@layout/activity_maps" />
+        
+        
+       <FrameLayout
+           android:layout_width="match_parent"
+           android:layout_height="300dp"
+           android:id="@+id/container_location_list"
+           android:layout_alignParentBottom="true">
+
+       </FrameLayout>
 
     </RelativeLayout>
 

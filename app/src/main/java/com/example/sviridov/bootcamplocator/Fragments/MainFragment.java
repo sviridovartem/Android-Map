@@ -1,27 +1,32 @@
-package com.example.sviridov.bootcamplocator.fragments;
+package com.example.sviridov.bootcamplocator.Fragments;
 
 import android.content.Context;
-import android.location.Location;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.example.sviridov.bootcamplocator.R;
-import com.example.sviridov.bootcamplocator.model.BootCamp;
-import com.example.sviridov.bootcamplocator.servises.DataService;
+import com.example.sviridov.bootcamplocator.Model.BootCamp;
+import com.example.sviridov.bootcamplocator.Servises.DataService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +39,7 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private MarkerOptions userMarker;
+    private LocationListFragment mlistFragment;
 
 
     private OnMainFragmentInteractionListener mListener;
@@ -63,6 +69,34 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mlistFragment = (LocationListFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.container_location_list);
+
+        if (mlistFragment == null) {
+            mlistFragment = LocationListFragment.newInstance();
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_location_list, mlistFragment).commit();
+        }
+
+        final EditText zipText = (EditText) view.findViewById(R.id.zip_text);
+        zipText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+                //no validation to real zipcode
+                if ((keyEvent.getAction() == keyEvent.ACTION_DOWN) && (i == keyEvent.KEYCODE_ENTER)) {
+                    String text = zipText.getText().toString();
+                    int zip = Integer.parseInt(text);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(zipText.getWindowToken(), 0);
+
+                    updateMarkerForZip(zip);
+//                  showList();
+                    return true;
+                }
+                return false;
+            }
+        });
+        hideList();
         return view;
     }
 
@@ -129,6 +163,18 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             mMap.addMarker(userMarker);
 
         }
+
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            List<android.location.Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            int zip = Integer.parseInt(addresses.get(1).getPostalCode());
+            updateMarkerForZip(zip);
+
+        } catch (IOException exception) {
+            //error
+        }
+
+
         updateMarkerForZip(92284);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
@@ -146,5 +192,13 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.a6096188ce806c80cf30dca727fe7c237));
             mMap.addMarker(marker);
         }
+    }
+
+    private void hideList() {
+        getActivity().getSupportFragmentManager().beginTransaction().hide(mlistFragment);
+    }
+
+    private void showList() {
+        getActivity().getSupportFragmentManager().beginTransaction().show(mlistFragment);
     }
 }

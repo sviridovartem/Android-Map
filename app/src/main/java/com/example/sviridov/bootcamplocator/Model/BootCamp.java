@@ -1,10 +1,16 @@
-package com.example.sviridov.bootcamplocator.model;
+package com.example.sviridov.bootcamplocator.Model;
 
 /**
  * Created by Artem on 10.03.2017.
  */
 
 public class BootCamp {
+
+    public String getImgURL() {
+        return DROWABLE + locationUrl;
+    }
+
+    final String DROWABLE = "drawable/";
 
     private float longtitude;
     private float latitude;

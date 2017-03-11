@@ -1,6 +1,6 @@
-package com.example.sviridov.bootcamplocator.servises;
+package com.example.sviridov.bootcamplocator.Servises;
 
-import com.example.sviridov.bootcamplocator.model.BootCamp;
+import com.example.sviridov.bootcamplocator.Model.BootCamp;
 
 import java.util.ArrayList;
 

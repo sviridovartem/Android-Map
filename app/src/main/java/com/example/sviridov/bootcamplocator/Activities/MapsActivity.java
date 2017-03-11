@@ -1,7 +1,6 @@
 package com.example.sviridov.bootcamplocator.Activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -14,7 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.example.sviridov.bootcamplocator.R;
-import com.example.sviridov.bootcamplocator.fragments.MainFragment;
+import com.example.sviridov.bootcamplocator.Fragments.MainFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
